@@ -20,9 +20,8 @@ public class RandomWalk {
      * @return the (Euclidean) distance from the origin to the current position.
      */
     public double distance() {
-        // TO BE IMPLEMENTED 
-         return 0.0;
-        // END SOLUTION
+    	//new implement
+        return Math.sqrt(x * x + y * y);
     }
 
     /**
@@ -32,9 +31,9 @@ public class RandomWalk {
      * @param dy the distance he moves in the y direction
      */
     private void move(int dx, int dy) {
-        // TO BE IMPLEMENTED  do move
-         throw new RuntimeException("Not implemented");
-        // END SOLUTION
+        x += dx;
+        y += dy;
+    	//throw new RuntimeException("Not implemented");
     }
 
     /**
@@ -43,8 +42,10 @@ public class RandomWalk {
      * @param m the number of steps the drunkard takes
      */
     private void randomWalk(int m) {
-        // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
+    	for (int i = 0; i < m; i++) {
+    		randomMove();
+        }
+    	//throw new RuntimeException("implementation missing");
     }
 
     /**
@@ -56,9 +57,10 @@ throw new RuntimeException("implementation missing");
         int step = random.nextBoolean() ? 1 : -1;
         move(ns ? step : 0, ns ? 0 : step);
     }
-
-    private int x = 0;
-    private int y = 0;
+    
+    //for unit test "edge case, large number of steps" changed x and y from int to long, avoiding overflow
+    private long x = 0;
+    private long y = 0;
 
     private final Random random = new Random();
 
