@@ -58,7 +58,8 @@ public class RandomWalk {
         move(ns ? step : 0, ns ? 0 : step);
     }
     
-    //for unit test "edge case, large number of steps" changed x and y from int to long, avoiding overflow
+    //for unit test "edge case, large number of steps" 
+    //changed x and y from int to long, avoiding overflow
     private long x = 0;
     private long y = 0;
 
