@@ -7,7 +7,13 @@ package com.phasmidsoftware.dsaipg.adt.threesum;
 import com.phasmidsoftware.dsaipg.util.Benchmark_Timer;
 import com.phasmidsoftware.dsaipg.util.TimeLogger;
 import com.phasmidsoftware.dsaipg.util.Utilities;
+// to use the stopwatch in given repo
+import com.phasmidsoftware.dsaipg.util.Stopwatch;
+//to create csv file
+import java.io.FileWriter;
+import java.io.IOException;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -78,13 +84,16 @@ public class ThreeSumBenchmark {
      * @param args command-line arguments (not used in this application).
      */
     public static void main(String[] args) {
+    	//when debugging, we decide to try n=50 and n=100 first 
+    	new ThreeSumBenchmark(100, 50, 50).runBenchmarks();
+    	new ThreeSumBenchmark(100, 100, 100).runBenchmarks();
         new ThreeSumBenchmark(100, 250, 250).runBenchmarks();
         new ThreeSumBenchmark(50, 500, 500).runBenchmarks();
         new ThreeSumBenchmark(20, 1000, 1000).runBenchmarks();
         new ThreeSumBenchmark(10, 2000, 2000).runBenchmarks();
         new ThreeSumBenchmark(5, 4000, 4000).runBenchmarks();
-        new ThreeSumBenchmark(3, 8000, 8000).runBenchmarks();
-        new ThreeSumBenchmark(2, 16000, 16000).runBenchmarks();
+        //new ThreeSumBenchmark(3, 8000, 8000).runBenchmarks();
+        //new ThreeSumBenchmark(2, 16000, 16000).runBenchmarks();
     }
 
     /**
@@ -103,9 +112,38 @@ public class ThreeSumBenchmark {
     private void benchmarkThreeSum(final String description, final Consumer<int[]> function, int n, final TimeLogger[] timeLoggers) {
         if (description.equals("ThreeSumCubic") && n > 4000) return;
         // TO BE IMPLEMENTED 
-throw new RuntimeException("implementation missing");
-    }
+        double totalTime = 0; 
+        int[] inputArray = supplier.get(); 
+        System.out.println("Benchmarking: " + description); // for debug use
+        for (int i = 0; i < runs; i++) {
 
+            
+            Stopwatch stopwatch = new Stopwatch();
+
+            function.accept(inputArray);
+            
+            totalTime += stopwatch.lap(); 
+           
+            stopwatch.close(); 
+
+        }
+
+        double avgTime = totalTime / runs; 
+        
+        for (TimeLogger logger : timeLoggers) 
+        {
+        
+        	logger.log(description, avgTime, n);  
+                
+        }
+        
+        System.out.println(description + " benchmark completed.\n"); 
+
+       
+    }
+    
+    
+    
     /**
      * An array of {@link TimeLogger} instances used for benchmarking the cubic implementation
      * of the Three-Sum algorithm. This array contains:
