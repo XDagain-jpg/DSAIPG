@@ -39,10 +39,16 @@ final class ParSort {
      * @param to    the ending index (exclusive) of the portion of the array to be sorted
      */
     public static void sort(int[] array, int from, int to) {
+    	//IMPLEMENTED safe base case
+    	if (to <= from) return;
+    	//END SOLUTION
         if (to - from >= cutoff) {
             CompletableFuture<int[]> completableFuture1 = null;
             CompletableFuture<int[]> completableFuture2 = null;
-            // TO BE IMPLEMENTED 
+            //IMPLEMENTED 
+            int mid = from + (to - from) / 2;
+            completableFuture1 = asyncSort(array, from, mid);
+            completableFuture2 = asyncSort(array, mid, to);
             // END SOLUTION
             CompletableFuture<int[]> completableFuture = completableFuture1.thenCombine(completableFuture2, ParSort::doMerge);
             completableFuture.whenComplete((result, throwable) -> System.arraycopy(result, 0, array, from, result.length));
@@ -62,11 +68,22 @@ final class ParSort {
      * @return a new sorted array containing the elements from the specified range of the input array
      */
     static int[] sortRecursive(int[] array, int from, int to) {
-        int[] result = new int[to - from];
-        // TO BE IMPLEMENTED 
-         // NOTE you need to do something here so that result is the sorted version of array.
-        // END SOLUTION
-        return result;
+        
+        //IMPLEMENTED 
+    	// NOTE you need to do something here so that result is the sorted version of array.
+        if (to == from) {
+        	int[] result = new int[1];
+        	result[0] = array[to];
+        	return result;
+        } 
+        if (to - from < cutoff) {
+        	int[] result = Arrays.copyOfRange(array, from, to);
+        	Arrays.sort(result);
+        	return result;
+        }
+        int mid = from + (to - from) / 2;
+        return doMerge(sortRecursive(array, from, mid),sortRecursive(array, mid, to));
+        //end solution
     }
 
     /**
